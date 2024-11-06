@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import { backendUrl } from "../utils/constants";
 import apiClient from ".";
 

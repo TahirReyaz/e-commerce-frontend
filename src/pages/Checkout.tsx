@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { placeOrder } from "../api/orders";
 import { showErrorToast, showSuccessToast } from "../utils/toastUtils";
 import { useNavigate } from "react-router-dom";
