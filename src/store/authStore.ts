@@ -10,6 +10,12 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   token: null,
   username: null,
-  login: (token, username) => set({ token, username }),
-  logout: () => set({ token: null, username: null }),
+  login: (token, username) => {
+    set({ token, username });
+    localStorage.setItem("token", token);
+  },
+  logout: () => {
+    set({ token: null, username: null });
+    localStorage.clear();
+  },
 }));
