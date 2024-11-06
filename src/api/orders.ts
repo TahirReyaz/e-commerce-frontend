@@ -68,7 +68,11 @@ export const getCartItemByProductId = async (id: string) => {
 export const getCartItems = async () => {
   try {
     const res = await apiClient.get(`${backendUrl}/cart`);
-    return res.data;
+    const totalPrice = res.data.reduce(
+      (total: number, item: CartItem) => total + item.quantity,
+      0
+    );
+    return { items: res.data, total: totalPrice };
   } catch (error: any) {
     const msg = error?.response?.data?.message;
     throw new Error(msg);

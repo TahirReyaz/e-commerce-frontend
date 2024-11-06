@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -19,7 +19,7 @@ const Cart = () => {
     data: cart,
     isLoading,
     error,
-  } = useQuery<CartItem[]>({
+  } = useQuery<{ items: CartItem[]; total: number }>({
     queryKey: ["cart"],
     queryFn: () => getCartItems(),
     enabled: !!isLoggedIn,
@@ -60,9 +60,11 @@ const Cart = () => {
     }
   };
 
-  if (!isLoggedIn) {
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, [isLoggedIn]);
 
   if (isLoading) return <div className="text-center mt-20">Loading...</div>;
 
@@ -74,11 +76,11 @@ const Cart = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">Shopping Cart</h1>
-      {cart?.length === 0 ? (
+      {cart?.items?.length === 0 ? (
         <p>Your cart is empty</p>
       ) : (
         <div>
-          {cart?.map((item) => (
+          {cart?.items?.map((item) => (
             <div
               key={item._id}
               className="flex items-center justify-between p-4 border-b"
@@ -107,9 +109,7 @@ const Cart = () => {
           ))}
           <div className="flex justify-between p-4 mt-4 border-t">
             <span>Total:</span>
-            <span className="text-lg font-bold">
-              {/* ${getTotalPrice().toFixed(2)} */}
-            </span>
+            <span className="text-lg font-bold">${cart?.total.toFixed(2)}</span>
           </div>
           <button
             onClick={() => {
