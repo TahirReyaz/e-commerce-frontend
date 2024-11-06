@@ -10,9 +10,10 @@ import {
 } from "../api/orders";
 import { showErrorToast, showSuccessToast } from "../utils/toastUtils";
 import { useLoadingBar } from "../components/LoadingBar";
+import { useAuthStore } from "../store/authStore";
 
 const Cart = () => {
-  const isLoggedIn = true;
+  const { isLoggedIn } = useAuthStore();
 
   const {
     data: cart,
@@ -59,6 +60,17 @@ const Cart = () => {
     }
   };
 
+  if (!isLoggedIn) {
+    navigate("/login");
+  }
+
+  if (isLoading) return <div className="text-center mt-20">Loading...</div>;
+
+  if (error)
+    return (
+      <div className="text-center mt-20 text-red-500">Error loading cart</div>
+    );
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">Shopping Cart</h1>
@@ -73,15 +85,17 @@ const Cart = () => {
             >
               <img src={item.image} alt={item.title} className="w-16" />
               <span>{item.title}</span>
-              <button onClick={() => handleQuantityChange(item._id, false)}>
-                {"<"}
-              </button>
-              <span className="w-12 text-center border rounded">
-                {item.quantity}
-              </span>
-              <button onClick={() => handleQuantityChange(item._id, true)}>
-                {">"}
-              </button>
+              <div className="flex items-center justify-center gap-1">
+                <button onClick={() => handleQuantityChange(item._id, false)}>
+                  {"<"}
+                </button>
+                <span className="w-12 text-center border rounded">
+                  {item.quantity}
+                </span>
+                <button onClick={() => handleQuantityChange(item._id, true)}>
+                  {">"}
+                </button>
+              </div>
               <span>${(item.price * item.quantity).toFixed(2)}</span>
               <button
                 onClick={() => handleDelete(item._id)}
