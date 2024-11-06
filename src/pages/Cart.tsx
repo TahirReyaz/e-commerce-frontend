@@ -101,13 +101,13 @@ const Cart = () => {
               <span>${(item.price * item.quantity).toFixed(2)}</span>
               <button
                 onClick={() => handleDelete(item._id)}
-                className="text-red-500"
+                className="text-red-500 rounded hover:bg-red-500/80 hover:text-white p-2"
               >
                 Remove
               </button>
             </div>
           ))}
-          <div className="flex justify-between p-4 mt-4 border-t">
+          <div className="flex justify-start items-center gap-2 p-4 mt-4 border-t">
             <span>Total:</span>
             <span className="text-lg font-bold">${cart?.total.toFixed(2)}</span>
           </div>

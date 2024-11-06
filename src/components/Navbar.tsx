@@ -16,7 +16,7 @@ const Navbar = () => {
     <nav className="bg-gray-800 p-4 text-white">
       <div className="container mx-auto flex justify-between">
         <Link to="/" className="text-lg font-bold">
-          Amazon Clone
+          Shopit
         </Link>
         <div className="flex gap-4">
           <Link to="/">Home</Link>
