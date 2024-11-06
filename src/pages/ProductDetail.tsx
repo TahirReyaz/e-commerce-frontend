@@ -33,8 +33,6 @@ const ProductDetail = () => {
     queryFn: () => getCartItemByProductId(id!),
   });
 
-  console.log({ cartData });
-
   const handleClick = async (inc: boolean) => {
     if (inc) {
       if (cartData) {
