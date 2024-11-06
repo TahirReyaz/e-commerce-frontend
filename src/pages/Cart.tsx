@@ -13,7 +13,7 @@ import { useLoadingBar } from "../components/LoadingBar";
 import { useAuthStore } from "../store/authStore";
 
 const Cart = () => {
-  const { isLoggedIn } = useAuthStore();
+  const { token } = useAuthStore();
 
   const {
     data: cart,
@@ -22,7 +22,7 @@ const Cart = () => {
   } = useQuery<{ items: CartItem[]; total: number }>({
     queryKey: ["cart"],
     queryFn: () => getCartItems(),
-    enabled: !!isLoggedIn,
+    enabled: !!token,
   });
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -61,10 +61,10 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!token) {
       navigate("/login");
     }
-  }, [isLoggedIn]);
+  }, [token]);
 
   if (isLoading) return <div className="text-center mt-20">Loading...</div>;
 

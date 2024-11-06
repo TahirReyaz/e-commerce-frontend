@@ -20,10 +20,10 @@ const Navbar = () => {
         </Link>
         <div className="flex gap-4">
           <Link to="/">Home</Link>
-          <Link to="/cart">Cart</Link>
           {token ? (
             <>
               <span>Hello, {username}</span>
+              <Link to="/cart">Cart</Link>
               <button onClick={handleLogout} className="text-red-500">
                 Logout
               </button>

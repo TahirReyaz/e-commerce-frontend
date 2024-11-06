@@ -46,9 +46,7 @@ export const createItem = async ({
 
 export const placeOrder = async () => {
   try {
-    await axios.post(`${backendUrl}/cart/order`, undefined, {
-      withCredentials: true,
-    });
+    await apiClient.post("/cart/checkout");
   } catch (error: any) {
     const msg = error?.response?.data?.message;
     throw new Error(msg);
@@ -72,6 +70,7 @@ export const getCartItems = async () => {
       (total: number, item: CartItem) => total + item.quantity,
       0
     );
+    console.log(res.data, { totalPrice });
     return { items: res.data, total: totalPrice };
   } catch (error: any) {
     const msg = error?.response?.data?.message;

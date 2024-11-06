@@ -1,20 +1,41 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { placeOrder } from "../api/orders";
+import { showErrorToast, showSuccessToast } from "../utils/toastUtils";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
+import { useLoadingBar } from "../components/LoadingBar";
 
 const Checkout = () => {
-  const [message, setMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const { token } = useAuthStore();
+  const loadingBar = useLoadingBar();
 
   const handleCheckout = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/api/checkout");
-      setMessage(response.data.message);
+      loadingBar.current?.continuousStart();
+      await placeOrder();
+      loadingBar.current?.complete();
+
+      showSuccessToast("Order placed! Our staff will contact you soon.");
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (error) {
-      setMessage("Error processing payment");
+      loadingBar.current?.complete();
+      showErrorToast(
+        "Error occurred while processing payment! Please react out to our help desk for refund."
+      );
     }
   };
 
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token]);
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-[400px]">
       <h1 className="text-2xl font-bold mb-6">Checkout</h1>
       <div className="space-y-4">
         <input
@@ -39,9 +60,6 @@ const Checkout = () => {
       >
         Place Order
       </button>
-      {message && (
-        <div className="mt-4 text-center font-semibold">{message}</div>
-      )}
     </div>
   );
 };

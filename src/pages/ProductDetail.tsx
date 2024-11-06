@@ -16,7 +16,7 @@ import { showErrorToast, showSuccessToast } from "../utils/toastUtils";
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
-  const { isLoggedIn } = useAuthStore();
+  const { token } = useAuthStore();
   const loadingBar = useLoadingBar();
 
   const {
@@ -31,7 +31,7 @@ const ProductDetail = () => {
   const { data: cartData } = useQuery<CartItem & { found: boolean }>({
     queryKey: ["cart", "prod", id],
     queryFn: () => getCartItemByProductId(id!),
-    enabled: !!isLoggedIn,
+    enabled: !!token,
   });
 
   const handleClick = async () => {
