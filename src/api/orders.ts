@@ -12,18 +12,13 @@ export interface CartItem {
   prodId: string;
 }
 
-export const increaseQuantity = async (id: string) => {
+export const changeQuantity = async (id: string, inc: boolean) => {
   try {
-    await apiClient.post(`${backendUrl}/cart/${id}/inc`);
-  } catch (error: any) {
-    const msg = error?.response?.data?.message;
-    throw new Error(msg);
-  }
-};
-
-export const decreaseQuantity = async (id: string) => {
-  try {
-    await apiClient.post(`${backendUrl}/cart/${id}/dec`);
+    const res = await apiClient.post(
+      `${backendUrl}/cart/${id}/update-quantity`,
+      { inc }
+    );
+    return res.data;
   } catch (error: any) {
     const msg = error?.response?.data?.message;
     throw new Error(msg);
@@ -72,9 +67,18 @@ export const getCartItemByProductId = async (id: string) => {
 
 export const getCartItems = async () => {
   try {
-    await axios.get(`${backendUrl}/cart`, {
-      withCredentials: true,
-    });
+    const res = await apiClient.get(`${backendUrl}/cart`);
+    return res.data;
+  } catch (error: any) {
+    const msg = error?.response?.data?.message;
+    throw new Error(msg);
+  }
+};
+
+export const removeItem = async (id: string) => {
+  try {
+    const res = await apiClient.delete(`${backendUrl}/cart/${id}`);
+    return res.data;
   } catch (error: any) {
     const msg = error?.response?.data?.message;
     throw new Error(msg);

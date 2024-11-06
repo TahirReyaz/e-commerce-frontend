@@ -5,10 +5,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProductById } from "../api/products";
 import {
   CartItem,
+  changeQuantity,
   createItem,
-  decreaseQuantity,
   getCartItemByProductId,
-  increaseQuantity,
 } from "../api/orders";
 
 const ProductDetail = () => {
@@ -34,15 +33,11 @@ const ProductDetail = () => {
   });
 
   const handleClick = async (inc: boolean) => {
-    if (inc) {
-      if (cartData) {
-        await increaseQuantity(cartData._id);
-      } else {
-        await createItem({ ...prodData, prodId: prodData.id });
-        queryClient.invalidateQueries({ queryKey: ["cart", "prod", id] });
-      }
+    if (cartData) {
+      await changeQuantity(cartData._id, inc);
     } else {
-      await decreaseQuantity(cartData?._id ?? "");
+      await createItem({ ...prodData, prodId: prodData.id });
+      queryClient.invalidateQueries({ queryKey: ["cart", "prod", id] });
     }
   };
 
